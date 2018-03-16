@@ -38,27 +38,38 @@ public class Rectangle {
         return height;
     }
 
-    // Get the intersection of this rectangle and the given rectangle
-    public Rectangle intersect(Rectangle other) {
-        if(doesNotIntersect(other)) {
-            return null;
-        }
-
-        int intLeftX = Math.max(this.getLeftX(), other.getLeftX());
-        int intRightX = Math.min(this.getRightX(), other.getRightX());
-        int intWidth = intRightX - intLeftX;
-
-        int intBottomY = Math.max(this.getBottomY(), other.getBottomY());
-        int intTopY = Math.min(this.getTopY(), other.getTopY());
-        int intHeight = intTopY - intBottomY;
-
-        return new Rectangle(intLeftX, intBottomY, intWidth, intHeight);
+    public String toString() {
+        return String.format("(%s, %s), %s, %s", leftX, bottomY, width, height);
     }
 
-    private boolean doesNotIntersect(Rectangle other) {
-        return this.getRightX() < other.getLeftX() 
-            || other.getRightX() < this.getLeftX()
-            || this.getBottomY() > other.getTopY()
-            || other.getBottomY() > other.getTopY();
+    public Range getXRange() {
+        return new Range(leftX, width);
+    }
+
+    public Range getYRange() {
+        return new Range(bottomY, height);
+    }
+
+    // Get the intersection of this rectangle and the given rectangle
+    public Rectangle intersect(Rectangle other) {
+        Range xOverlap = this.getXRange().intersect(other.getXRange());
+        Range yOverlap = this.getYRange().intersect(other.getYRange());
+
+        if(xOverlap.getLength() == 0 || yOverlap.getLength() == 0) {
+            return new Rectangle(0, 0, 0, 0);
+        }
+
+        return new Rectangle(
+            xOverlap.getStartPoint(), 
+            yOverlap.getStartPoint(),
+            xOverlap.getLength(), 
+            yOverlap.getLength());
+    }
+
+    public static void main(String[] args) {
+        Rectangle r1 = new Rectangle(1, 1, 2, 2);
+        Rectangle r2 = new Rectangle(3, 0, 2, 3);
+        Rectangle intersection = r1.intersect(r2);
+        System.out.println(intersection);
     }
 }
