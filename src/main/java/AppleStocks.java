@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class AppleStocks {
     public static int getMaxProfit(int[] prices) {
@@ -21,14 +20,17 @@ public class AppleStocks {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        int[][] arrs = {
+                {12, 1, 5, 9, 11, 3},
+                {12, 1},
+                {12, 10, 8, 6}
+        };
 
-        while(scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            int[] arr = Utils.stringToIntArray(line);
-            System.out.println(Arrays.toString(arr));
-            System.out.println(getMaxProfit(arr));
+        for(int[] a: arrs) {
+            System.out.println(Arrays.toString(a));
+            System.out.println(getMaxProfit(a));
             System.out.println();
         }
     }
 }
+
